@@ -1,0 +1,113 @@
+<!DOCTYPE html lang="pt-br">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/tela_cadastro.css">
+        <title>Formulário de Novo Aluno</title>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Sistema de gerenciamento de biblioteca</h1>
+            </header>
+            <main>
+                <h2>Cadastro de Novo Aluno</h2>
+                <div>
+                    <a href="index.html"><img class="icone_casa" src="imagens/home.png" alt=""></a>
+                    <p>Página Inicial</p>
+
+                    <form action="">
+                        <label for="matricula">Matricula:</label>
+                        <input class="matricula" name="matricula" maxlength="50">
+                        <br>
+                        <label for="nome">Nome: </label>
+                        <input class="nome" type="text" name="nome" maxlength="50">
+                        <br>
+                        <label for="endereco">Endereço: </label>
+                        <input class="endereco" name="endereco" maxlength="50">
+                        <br>
+                        <label for="telefone">Telefone: </label>
+                        <input class="telefone" name="telefone" maxlength="50">
+                        <br>
+                        <label for="email">Email: </label>
+                        <input class="email" name="email" maxlength="50">
+                        <br>
+                        <input class="confirmarBtn" type="submit" value="Confirmar">
+                        <a href="index.html"><input class="cancelarBtn" type="button" value="Cancelar"></a>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <script>
+
+            //Variáveis
+            var campo_matricula = document.querySelector("input.matricula");
+            var campo_nome = document.querySelector("input.nome");
+            var campo_endereco = document.querySelector("input.endereco");
+            var campo_telefone = document.querySelector("input.telefone");
+            var campo_email = document.querySelector("input.email");
+
+            var botao_confirmar = document.querySelector("input.confirmarBtn");
+            var botao_cancelar = document.querySelector("input.cancelarBtn");
+
+            var idAcao = Number(localStorage.getItem("idAcao"));
+
+            
+            //Sequencia auto
+            var alunosSeq = Number(localStorage.getItem("alunosSeq"));
+            if(! alunosSeq ){
+                alunosSeq = 0;
+            }
+
+            //Objetos
+            var ListaAlunos = JSON.parse(localStorage.getItem("ListaAlunos"));
+            if(! ListaAlunos ){
+                ListaAlunos = {Alunos:[]};
+            }
+
+            //JSON
+            var myJSON;
+
+            //Funções
+            function verificaDados(event) {
+                campo_nome.value = campo_nome.value.trim();
+                if (campo_matricula.value == "" || campo_nome.value == "") {
+                    alert("Dados Inválidos! Tente Novamente.");
+                }
+                else{
+                    armazenarDados(event);
+                }
+            }
+
+            function armazenarDados(event) {
+                event.preventDefault();
+                //Adiciona aluno de ListaAlunos
+                if (idAcao == 0) {
+                    alunosSeq += 1;
+                    ListaAlunos.Alunos.push({matricula: campo_matricula.value, nome: campo_nome.value, endereco: campo_endereco.value, telefone: campo_telefone.value, email: campo_email.value, id: alunosSeq});
+                }
+                else{
+                    ListaAlunos.Alunos.forEach(e => {
+                        if (e.id == idAcao){
+                            var indice = ListaAlunos.Alunos.indexOf(e);
+                            ListaAlunos.Alunos.splice(indice, 1, {matricula: campo_matricula.value, nome: campo_nome.value, endereco: campo_endereco.value, telefone: telefone.value, email: campo_email.value, id: alunosSeq});
+                        }
+                    });
+                }
+                myJSON = JSON.stringify(ListaAlunos);
+                localStorage.setItem("ListaAlunos", myJSON);
+                localStorage.setItem("alunosSeq", alunosSeq);
+                window.location.assign("index.html");
+            }
+
+            //Principal
+
+            botao_confirmar.addEventListener("click", verificaDados);
+            botao_cancelar.addEventListener("click", function(){
+                window.location.assign("index.html");
+            });
+            
+                
+        </script>
+    </body>
+</html>
